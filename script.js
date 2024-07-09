@@ -1,64 +1,103 @@
-var myApp = angular.module("myApp", []);
+const productos = [
+  { id: 1, nombre: "Camiseta Vintage", precio: 29.99, descripcion: "Camiseta de algodón 100% con diseño retro", imagen: "camiseta.jpg" },
+  { id: 2, nombre: "Jeans Clásicos", precio: 59.99, descripcion: "Jeans de corte recto, perfectos para cualquier ocasión", imagen: "jeans.jpg" },
+  { id: 3, nombre: "Zapatillas Urbanas", precio: 79.99, descripcion: "Zapatillas cómodas para el día a día en la ciudad", imagen: "zapatillas.jpg" },
+  { id: 4, nombre: "Chaqueta de Cuero", precio: 129.99, descripcion: "Chaqueta de cuero genuino con forro interior", imagen: "chaqueta.jpg" },
+  { id: 5, nombre: "Vestido Elegante", precio: 89.99, descripcion: "Vestido para ocasiones especiales", imagen: "vestido.jpg" },
+  { id: 6, nombre: "Reloj Deportivo", precio: 99.99, descripcion: "Reloj resistente al agua con funciones deportivas", imagen: "reloj.jpg" }
+];
 
-myApp.controller("myController", function($scope){
-  $scope.app = "Ecomerce";
-  $scope.nav = "home";
-  $scope.total = 0;
-  $scope.setNav = function(x){
-    $scope.nav = x;
+const productosContainer = document.getElementById('productos');
+const listaPedido = document.getElementById('lista-pedido');
+const totalPedido = document.getElementById('total-pedido');
+const enviarPedidoBtn = document.getElementById('enviar-pedido');
+const envioCheckbox = document.getElementById('envio-domicilio');
+const direccionInput = document.getElementById('direccion-envio');
+
+let pedido = [];
+const COSTO_ENVIO = 5.99;
+
+function renderizarProductos() {
+  productosContainer.innerHTML = '';
+  productos.forEach(producto => {
+      const productoElement = document.createElement('div');
+      productoElement.classList.add('producto');
+      productoElement.innerHTML = `
+          <img src="${producto.imagen}" alt="${producto.nombre}">
+          <h3>${producto.nombre}</h3>
+          <p>${producto.descripcion}</p>
+          <p>Precio: $${producto.precio.toFixed(2)}</p>
+          <button onclick="agregarAlPedido(${producto.id})">Agregar al pedido</button>
+      `;
+      productosContainer.appendChild(productoElement);
+  });
+}
+
+function agregarAlPedido(id) {
+  const producto = productos.find(p => p.id === id);
+  const itemEnPedido = pedido.find(item => item.id === producto.id);
+  if (itemEnPedido) {
+      itemEnPedido.cantidad++;
+  } else {
+      pedido.push({ ...producto, cantidad: 1 });
   }
-  $scope.orderId = 0;
-  $scope.cart = [
-    {id: 1, nof: 0},
-    {id: 2, nof: 0},
-    {id: 3, nof: 0},
-    {id: 4, nof: 0},
-    {id: 5, nof: 0},
-    {id: 6, nof: 0},
-    {id: 7, nof: 0},
-  ];
-  $scope.products = [
-    {id: 1, name: "Laptop", price: 25000},
-    {id: 2, name: "Mouse", price: 500},
-    {id: 3, name: "Keyboard", price: 1200},
-    {id: 4, name: "Smartphone", price: 10000},
-    {id: 5, name: "Mac Book", price: 80000},
-    {id: 6, name: "iPhone", price: 70000},
-    {id: 7, name: "Headset", price: 2000}
-  ]
-  $scope.orders = [];
-  $scope.addOne = function(index){
-    $scope.cart[index].nof++;
-    $scope.total += $scope.products[index].price;
+  actualizarListaPedido();
+}
+
+function eliminarDelPedido(id) {
+  pedido = pedido.filter(item => item.id !== id);
+  actualizarListaPedido();
+}
+
+function actualizarListaPedido() {
+  listaPedido.innerHTML = '';
+  pedido.forEach(item => {
+      const itemElement = document.createElement('div');
+      itemElement.classList.add('item-pedido');
+      itemElement.innerHTML = `
+          <span>${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}</span>
+          <button class="eliminar-item" onclick="eliminarDelPedido(${item.id})">Eliminar</button>
+      `;
+      listaPedido.appendChild(itemElement);
+  });
+  actualizarTotal();
+}
+
+function actualizarTotal() {
+  let total = pedido.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+  if (envioCheckbox.checked) {
+      total += COSTO_ENVIO;
   }
-  $scope.removeOne = function(index){
-    if($scope.cart[index].nof > 0){
-      $scope.cart[index].nof--;
-      $scope.total -= $scope.products[index].price;
-    }
+  totalPedido.textContent = `Total: $${total.toFixed(2)}`;
+}
+
+envioCheckbox.addEventListener('change', function() {
+  direccionInput.style.display = this.checked ? 'block' : 'none';
+  actualizarTotal();
+});
+
+enviarPedidoBtn.addEventListener('click', enviarPedidoPorWhatsApp);
+
+function enviarPedidoPorWhatsApp() {
+  if (pedido.length === 0) {
+      alert('Agrega productos a tu pedido antes de enviarlo.');
+      return;
   }
-  $scope.filterCart = function(item){
-    return item.nof > 0;
+
+  let mensaje = 'Hola, me gustaría hacer el siguiente pedido:\n\n';
+  pedido.forEach(item => {
+      mensaje += `${item.nombre} x${item.cantidad} - $${(item.precio * item.cantidad).toFixed(2)}\n`;
+  });
+  
+  let total = pedido.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
+  
+  if (envioCheckbox.checked) {
+      mensaje += `\nEnvío a domicilio: $${COSTO_ENVIO.toFixed(2)}`;
+      total += COSTO_ENVIO;
+      mensaje += `\nDirección de envío: ${direccionInput.value}`;
   }
-  $scope.placeOrder = function(){
-    $scope.orderId += 1;
-    $scope.orders.unshift({
-      id: $scope.orderId,
-      date: Date(),
-      cart: $scope.cart,
-      total: $scope.total
-    })
-    $scope.cart = [
-      {id: 1, nof: 0},
-      {id: 2, nof: 0},
-      {id: 3, nof: 0},
-      {id: 4, nof: 0},
-      {id: 5, nof: 0},
-      {id: 6, nof: 0},
-      {id: 7, nof: 0},
-    ];
-    $scope.total = 0;
-    alert("Order Placed Successfully!!!");
-    
-  }
-})
+  
+  mensaje += `\n\nTotal: $${total.toFixed(2)}`;
+}
+
+renderizarProductos();

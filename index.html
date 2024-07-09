@@ -1,70 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Mi tienda de computacion</title>
-  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Tienda Online</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script></script>
 
 </head>
 <body>
-<html ng-app="myApp">
-  <head>
-    <title>CompuR</title>
-  </head>
-  <body ng-controller="myController">
-    <div class="flex justify-between">
-      <div ng-click="setNav('home')" ng-class="{'bg-gray-200': nav === 'home'}" class="flex-grow text-center border p-1 cursor-pointer">Home</div>
-      <div ng-click="setNav('cart')" ng-class="{'bg-gray-200': nav === 'cart'}" class="flex-grow text-center border p-1 cursor-pointer">Cart</div>
-      <div ng-click="setNav('orders')" ng-class="{'bg-gray-200': nav === 'orders'}" class="flex-grow text-center border p-1 cursor-pointer">Orders</div>
-    </div>
-    <div class="p-2">
-      <home class="flex flex-col gap-2" ng-show="nav === 'home'">
-        <input placeholder="Search..." class="w-full border p-1 rounded-md outline-none" type="text" ng-model="search"/>
-        <item class="flex justify-between" ng-repeat="x in products">
-          <p>{{x.name}}</p>
-          <div class="flex gap-2">
-            <p>{{x.price}}</p>
-            <div class="flex gap-2">
-              <button ng-click="removeOne($index)" class="bg-red-300 px-2">-</button>
-              <p>{{cart[$index].nof}}</p>
-              <button ng-click="addOne($index)" class="bg-green-300 px-2">+</button>
-            </div>
-          </div>
-        </item>
-      </home>
-      <cart class="flex flex-col gap-3" ng-show="nav === 'cart'">
-        <div ng-show="total != 0" class="flex flex-col gap-5">
-          <div>
-            <div class="flex justify-between" ng-repeat="i in cart | filter: filterCart">
-              <p>{{products[i.id-1].name}}</p>
-              <div class="flex gap-1">
-                <p>{{i.nof}}</p>
-                <p> X </p>
-                <p>{{products[i.id-1].price}}</p>
-                <p> = </p>
-                <p>{{i.nof * products[i.id-1].price}}
-              </div>
-            </div>
-          </div>
-          <div class="flex justify-between">
-            <p>Total</p>
-            <p>{{total}}</p>
-          </div>
-          <button ng-click="placeOrder()" class="bg-green-300 w-fit px-2 py-1 rounded-md">Place Order</button>
-        </div>
-        <div ng-show="total === 0" class="text-center">
-          No Items in cart
-        </dv
-      </cart>
-      <orders ng-show="nav === 'orders'">
-        Orders
-      </orders>
-    </div>
-  </body>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.js"></script>
-</html>
-  <script  src="./script.js"></script>
+    <header>
+    <nav>
+        <ul>
+            <li><a href="#productos">EZTILO UNIKO</a></li>
+        </ul>
+    </nav>
+</header>
 
+    <main>
+        <section id="productos" class="productos-grid">
+            <!-- Los productos se generarán aquí dinámicamente -->
+        </section>
+
+        <section id="carrito">
+            <h2>Tu Pedido</h2>
+            <div id="lista-pedido"></div>
+            <div class="envio-opciones">
+                <label>
+                    <input type="checkbox" id="envio-domicilio"> Envío a domicilio
+                </label>
+                <input type="text" id="direccion-envio" placeholder="Dirección de envío" style="display: none;">
+            </div>
+            <div id="total-pedido"></div>
+            <button id="enviar-pedido">Enviar Pedido por Interno</button>
+        </section>
+
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
