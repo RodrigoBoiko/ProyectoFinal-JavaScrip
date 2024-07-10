@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Tienda Online</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/a076d05399.js">
-  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script></script>
 
 </head>
 <body>
@@ -33,8 +31,20 @@
                 </label>
                 <input type="text" id="direccion-envio" placeholder="Dirección de envío" style="display: none;">
             </div>
-            <div id="total-pedido"></div>
-            <button id="enviar-pedido">Enviar Pedido por Interno</button>
+            <form action="/procesar-pedido" method="post">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+        
+                <label for="apellido">Apellido:</label>
+                <input type="text" id="apellido" name="apellido" required>
+        
+                <label for="correo">Correo electrónico:</label>
+                <input type="email" id="correo" name="correo" required>
+        
+                <input id="enviar-pedido" type="submit" value="Enviar pedido">
+            </form>
+            <div id="total-pedido">
+            
         </section>
 
     </main>
