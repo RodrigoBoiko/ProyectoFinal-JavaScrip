@@ -78,6 +78,7 @@ envioCheckbox.addEventListener('change', function() {
 
 enviarPedidoBtn.addEventListener('click', enviarPedido);
 
+
 function enviarPedido() {
     if (pedido.length === 0) {
         alert('Agrega productos a tu pedido antes de enviarlo.');
@@ -99,6 +100,22 @@ function enviarPedido() {
 }
 
 renderizarProductos();
+
+
+const botonProcesarCompra = document.getElementById("enviar-pedido");
+const mensajeAgradecimiento = document.getElementById("enviar-pedido");
+
+botonProcesarCompra.addEventListener("click", () => {
+    mensajeAgradecimiento.style.display = "block";
+
+    limpiarCampos();
+});
+
+function limpiarCampos() {
+    document.getElementById("correo").value = "";
+    document.getElementById("apellido").value = "";
+    document.getElementById("nombre").value = "";
+}
 
 fetch('productos.json')
   .then(response => response.json())

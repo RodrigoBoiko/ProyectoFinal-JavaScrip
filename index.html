@@ -31,7 +31,7 @@
                 </label>
                 <input type="text" id="direccion-envio" placeholder="Dirección de envío" style="display: none;">
             </div>
-            <form action="/procesar-pedido" method="post">
+            <form action="" method="post" id="formulario-pedido">
                 <label for="nombre">Nombre:</label>
                 <input type="text" id="nombre" name="nombre" required>
         
@@ -43,12 +43,14 @@
         
                 <input id="enviar-pedido" type="submit" value="Enviar pedido">
             </form>
-            <div id="total-pedido">
-            
+        
+            <div id="total-pedido"></div>
+        
         </section>
 
     </main>
 
     <script src="script.js"></script>
+    
 </body>
 </html>
