@@ -101,7 +101,6 @@ function enviarPedido() {
 
 renderizarProductos();
 
-
 const botonProcesarCompra = document.getElementById("enviar-pedido");
 const mensajeAgradecimiento = document.getElementById("enviar-pedido");
 
